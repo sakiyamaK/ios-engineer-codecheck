@@ -9,16 +9,18 @@
 import UIKit
 
 final class SearchGitHubListViewController: UITableViewController {
-    
+
+    private let nextSeguueIdentifier: String = "Detail"
+    private let gitHubRepositoryUrlEndPointStr: String = "https://api.github.com/search/repositories"
+    private let cellIdentifier: String = "Repository"
+
     @IBOutlet private weak var searchBar: UISearchBar!
     
-    private(set) var repogitories: [[String: Any]] = []
+    private var repogitories: [[String: Any]] = []
+    private var selectepogitory: [String: Any] = [:]
 
     private var task: URLSessionTask?
-    private var searchWord: String!
-    private var searchGitHubRepositoryUrlStr: String!
-    private(set) var selectRepogitoryIndex: Int!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -27,12 +29,11 @@ final class SearchGitHubListViewController: UITableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-        if segue.identifier == "Detail" {
-            let searchedGitHubViewController = segue.destination as! SearchedGitHubViewController
-            searchedGitHubViewController.searchGitHubListViewController = self
+        guard segue.identifier == nextSeguueIdentifier,
+              let searchedGitHubViewController = segue.destination as? SearchedGitHubViewController else {
+            return
         }
-        
+        searchedGitHubViewController.selectRepogitory = selectepogitory
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -40,9 +41,12 @@ final class SearchGitHubListViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let cell = UITableViewCell()
-        let repository = repogitories[indexPath.row]
+        guard
+            let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier),
+            let repository = repogitories[safe: indexPath.row] else {
+            // クラッシュログをサーバーにあげる
+            fatalError()
+        }
         cell.textLabel?.text = repository["full_name"] as? String ?? ""
         cell.detailTextLabel?.text = repository["language"] as? String ?? ""
         cell.tag = indexPath.row
@@ -51,9 +55,12 @@ final class SearchGitHubListViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // 画面遷移時に呼ばれる
-        selectRepogitoryIndex = indexPath.row
-        performSegue(withIdentifier: "Detail", sender: self)
+        guard let selectepogitory = repogitories[safe: indexPath.row] else {
+            // 本来はアラートを出す
+            return
+        }
+        self.selectepogitory = selectepogitory
+        performSegue(withIdentifier: nextSeguueIdentifier, sender: self)
     }
 }
 
@@ -70,22 +77,52 @@ extension SearchGitHubListViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         
-        searchWord = searchBar.text!
-        
-        if searchWord.count != 0 {
-            searchGitHubRepositoryUrlStr = "https://api.github.com/search/repositories?q=\(searchWord!)"
-            task = URLSession.shared.dataTask(with: URL(string: searchGitHubRepositoryUrlStr)!) { (data, res, err) in
-                if let obj = try! JSONSerialization.jsonObject(with: data!) as? [String: Any] {
-                    if let items = obj["items"] as? [[String: Any]] {
-                        self.repogitories = items
-                        DispatchQueue.main.async {
-                            self.tableView.reloadData()
-                        }
-                    }
-                }
-            }
-            // これ呼ばなきゃリストが更新されません
-            task?.resume()
+        guard let searchWord = searchBar.text, !searchWord.isEmpty else {
+            // 本来はアラートを出す
+            return
         }
+
+        guard let url = gitHubRepositoryUrlEndPointStr.url(
+            withQueryItemDic: ["q": searchWord]
+        ) else {
+            // 本来はアラートを出す
+            return
+        }
+
+        task = URLSession.shared.dataTask(with: url) { (data, res, err) in
+            if let err {
+                // 本来はアラートを出す
+                print(err)
+                return
+            }
+            guard let data else {
+                // 本来はアラートを出す
+                print("[\(url)] : data is nil")
+                return
+            }
+            do {
+                guard let obj = try JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+                    // 本来はアラートを出す
+                    print("[\(url)] : json serialization error")
+                    return
+                }
+                guard let items = obj["items"] as? [[String: Any]] else {
+                    // 本来はアラートを出す
+                    print("[\(url)] : items is nil")
+                    return
+                }
+                self.repogitories = items
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            } catch let err {
+                // 本来はアラートを出す
+                print(err.localizedDescription)
+                return
+            }
+        }
+        // これ呼ばなきゃAPI通信が発生しません
+        task?.resume()
     }
 }
+

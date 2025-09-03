@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B6A008A02E6898F1003B2E72 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A0089F2E6898ED003B2E72 /* String+.swift */; };
+		B6A008A22E689A20003B2E72 /* Collection+.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A008A12E689A20003B2E72 /* Collection+.swift */; };
 		BF0A658D244F2A3B00280FA6 /* SearchedGitHubViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0A658C244F2A3B00280FA6 /* SearchedGitHubViewController.swift */; };
 		BFD945DF244DC5E80012785A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD945DE244DC5E80012785A /* AppDelegate.swift */; };
 		BFD945E1244DC5E80012785A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD945E0244DC5E80012785A /* SceneDelegate.swift */; };
@@ -36,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B6A0089F2E6898ED003B2E72 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
+		B6A008A12E689A20003B2E72 /* Collection+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+.swift"; sourceTree = "<group>"; };
 		BF0A658C244F2A3B00280FA6 /* SearchedGitHubViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchedGitHubViewController.swift; sourceTree = "<group>"; };
 		BFD945DB244DC5E80012785A /* iOSEngineerCodeCheck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOSEngineerCodeCheck.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFD945DE244DC5E80012785A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -78,6 +82,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B6A008A32E689AD5003B2E72 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				B6A008A12E689A20003B2E72 /* Collection+.swift */,
+				B6A0089F2E6898ED003B2E72 /* String+.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
 		BFD945D2244DC5E80012785A = {
 			isa = PBXGroup;
 			children = (
@@ -101,6 +114,7 @@
 		BFD945DD244DC5E80012785A /* iOSEngineerCodeCheck */ = {
 			isa = PBXGroup;
 			children = (
+				B6A008A32E689AD5003B2E72 /* Extension */,
 				BFD945DE244DC5E80012785A /* AppDelegate.swift */,
 				BFD945E0244DC5E80012785A /* SceneDelegate.swift */,
 				BFD945E2244DC5E80012785A /* SearchGitHubListViewController.swift */,
@@ -265,7 +279,9 @@
 			files = (
 				BFD945E3244DC5E80012785A /* SearchGitHubListViewController.swift in Sources */,
 				BF0A658D244F2A3B00280FA6 /* SearchedGitHubViewController.swift in Sources */,
+				B6A008A02E6898F1003B2E72 /* String+.swift in Sources */,
 				BFD945DF244DC5E80012785A /* AppDelegate.swift in Sources */,
+				B6A008A22E689A20003B2E72 /* Collection+.swift in Sources */,
 				BFD945E1244DC5E80012785A /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

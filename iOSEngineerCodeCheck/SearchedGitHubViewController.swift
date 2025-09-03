@@ -9,7 +9,11 @@
 import UIKit
 
 final class SearchedGitHubViewController: UIViewController {
-    
+
+    deinit {
+        print("[\(#file)] \(#function): \(#line)")
+    }
+
     @IBOutlet private weak var avaterImageView: UIImageView!
     
     @IBOutlet private weak var titleLabel: UILabel!
@@ -21,7 +25,17 @@ final class SearchedGitHubViewController: UIViewController {
     @IBOutlet private weak var forkCountLabel: UILabel!
     @IBOutlet private weak var issueCountLabel: UILabel!
     
+    @IBOutlet private weak var mainStackView: UIStackView! {
+        didSet {
+            // Interaface Builderで設定できないパラメータを初期化
+            mainStackView.isLayoutMarginsRelativeArrangement = true
+            mainStackView.layoutMargins = .init(top: 55, left: 24, bottom: 0, right: 24)
+        }
+    }
+
     var selectRepogitory: [String: Any] = [:]
+
+    private var task: URLSessionTask?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,6 +56,12 @@ final class SearchedGitHubViewController: UIViewController {
 
         getImage()
     }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        task?.cancel()
+        task = nil
+    }
 }
 
 private extension SearchedGitHubViewController {
@@ -54,7 +74,10 @@ private extension SearchedGitHubViewController {
             return
         }
 
-        URLSession.shared.dataTask(with: imageUrl) { (data, res, err) in
+        task = URLSession.shared.dataTask(with: imageUrl) {[weak self] (data, res, err) in
+            guard let self else {
+                fatalError()
+            }
             if let err {
                 // 本来はアラートを出す
                 print(err)
@@ -71,9 +94,10 @@ private extension SearchedGitHubViewController {
                 return
             }
 
-            DispatchQueue.main.async {
-                self.avaterImageView.image = image
+            DispatchQueue.main.async {[weak self] in
+                self?.avaterImageView.image = image
             }
-        }.resume()
+        }
+        task?.resume()
     }
 }

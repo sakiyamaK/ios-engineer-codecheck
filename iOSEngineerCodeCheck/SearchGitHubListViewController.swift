@@ -10,6 +10,10 @@ import UIKit
 
 final class SearchGitHubListViewController: UITableViewController {
 
+    deinit {
+        print("[\(#file)] \(#function): \(#line)")
+    }
+
     private let nextSeguueIdentifier: String = "Detail"
     private let gitHubRepositoryUrlEndPointStr: String = "https://api.github.com/search/repositories"
     private let cellIdentifier: String = "Repository"
@@ -27,7 +31,13 @@ final class SearchGitHubListViewController: UITableViewController {
         searchBar.text = "GitHubのリポジトリを検索できるよー"
         searchBar.delegate = self
     }
-    
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        task?.cancel()
+        task = nil
+    }
+
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard segue.identifier == nextSeguueIdentifier,
               let searchedGitHubViewController = segue.destination as? SearchedGitHubViewController else {
@@ -89,7 +99,10 @@ extension SearchGitHubListViewController: UISearchBarDelegate {
             return
         }
 
-        task = URLSession.shared.dataTask(with: url) { (data, res, err) in
+        task = URLSession.shared.dataTask(with: url) {[weak self] (data, res, err) in
+            guard let self else {
+                fatalError()
+            }
             if let err {
                 // 本来はアラートを出す
                 print(err)
@@ -112,8 +125,8 @@ extension SearchGitHubListViewController: UISearchBarDelegate {
                     return
                 }
                 self.repogitories = items
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
+                DispatchQueue.main.async {[weak self] in
+                    self?.tableView.reloadData()
                 }
             } catch let err {
                 // 本来はアラートを出す

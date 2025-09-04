@@ -3,19 +3,10 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B6A008A02E6898F1003B2E72 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A0089F2E6898ED003B2E72 /* String+.swift */; };
-		B6A008A22E689A20003B2E72 /* Collection+.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6A008A12E689A20003B2E72 /* Collection+.swift */; };
-		BF0A658D244F2A3B00280FA6 /* SearchedGitHubViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF0A658C244F2A3B00280FA6 /* SearchedGitHubViewController.swift */; };
-		BFD945DF244DC5E80012785A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD945DE244DC5E80012785A /* AppDelegate.swift */; };
-		BFD945E1244DC5E80012785A /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD945E0244DC5E80012785A /* SceneDelegate.swift */; };
-		BFD945E3244DC5E80012785A /* SearchGitHubListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD945E2244DC5E80012785A /* SearchGitHubListViewController.swift */; };
-		BFD945E6244DC5E80012785A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BFD945E4244DC5E80012785A /* Main.storyboard */; };
-		BFD945E8244DC5EB0012785A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BFD945E7244DC5EB0012785A /* Assets.xcassets */; };
-		BFD945EB244DC5EB0012785A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BFD945E9244DC5EB0012785A /* LaunchScreen.storyboard */; };
 		BFD945F6244DC5EB0012785A /* iOSEngineerCodeCheckTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD945F5244DC5EB0012785A /* iOSEngineerCodeCheckTests.swift */; };
 		BFD94601244DC5EC0012785A /* iOSEngineerCodeCheckUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD94600244DC5EC0012785A /* iOSEngineerCodeCheckUITests.swift */; };
 /* End PBXBuildFile section */
@@ -38,17 +29,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		B6A0089F2E6898ED003B2E72 /* String+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+.swift"; sourceTree = "<group>"; };
-		B6A008A12E689A20003B2E72 /* Collection+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+.swift"; sourceTree = "<group>"; };
-		BF0A658C244F2A3B00280FA6 /* SearchedGitHubViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchedGitHubViewController.swift; sourceTree = "<group>"; };
 		BFD945DB244DC5E80012785A /* iOSEngineerCodeCheck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOSEngineerCodeCheck.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		BFD945DE244DC5E80012785A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		BFD945E0244DC5E80012785A /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		BFD945E2244DC5E80012785A /* SearchGitHubListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchGitHubListViewController.swift; sourceTree = "<group>"; };
-		BFD945E5244DC5E80012785A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		BFD945E7244DC5EB0012785A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		BFD945EA244DC5EB0012785A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		BFD945EC244DC5EB0012785A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BFD945F1244DC5EB0012785A /* iOSEngineerCodeCheckTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOSEngineerCodeCheckTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFD945F5244DC5EB0012785A /* iOSEngineerCodeCheckTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSEngineerCodeCheckTests.swift; sourceTree = "<group>"; };
 		BFD945F7244DC5EB0012785A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -56,6 +37,20 @@
 		BFD94600244DC5EC0012785A /* iOSEngineerCodeCheckUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSEngineerCodeCheckUITests.swift; sourceTree = "<group>"; };
 		BFD94602244DC5EC0012785A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		B6A008DD2E68A859003B2E72 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = BFD945DA244DC5E80012785A /* iOSEngineerCodeCheck */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		B6A008D02E68A859003B2E72 /* iOSEngineerCodeCheck */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (B6A008DD2E68A859003B2E72 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = iOSEngineerCodeCheck; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		BFD945D8244DC5E80012785A /* Frameworks */ = {
@@ -82,19 +77,10 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		B6A008A32E689AD5003B2E72 /* Extension */ = {
-			isa = PBXGroup;
-			children = (
-				B6A008A12E689A20003B2E72 /* Collection+.swift */,
-				B6A0089F2E6898ED003B2E72 /* String+.swift */,
-			);
-			path = Extension;
-			sourceTree = "<group>";
-		};
 		BFD945D2244DC5E80012785A = {
 			isa = PBXGroup;
 			children = (
-				BFD945DD244DC5E80012785A /* iOSEngineerCodeCheck */,
+				B6A008D02E68A859003B2E72 /* iOSEngineerCodeCheck */,
 				BFD945F4244DC5EB0012785A /* iOSEngineerCodeCheckTests */,
 				BFD945FF244DC5EB0012785A /* iOSEngineerCodeCheckUITests */,
 				BFD945DC244DC5E80012785A /* Products */,
@@ -109,22 +95,6 @@
 				BFD945FC244DC5EB0012785A /* iOSEngineerCodeCheckUITests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		BFD945DD244DC5E80012785A /* iOSEngineerCodeCheck */ = {
-			isa = PBXGroup;
-			children = (
-				B6A008A32E689AD5003B2E72 /* Extension */,
-				BFD945DE244DC5E80012785A /* AppDelegate.swift */,
-				BFD945E0244DC5E80012785A /* SceneDelegate.swift */,
-				BFD945E2244DC5E80012785A /* SearchGitHubListViewController.swift */,
-				BF0A658C244F2A3B00280FA6 /* SearchedGitHubViewController.swift */,
-				BFD945E4244DC5E80012785A /* Main.storyboard */,
-				BFD945E7244DC5EB0012785A /* Assets.xcassets */,
-				BFD945E9244DC5EB0012785A /* LaunchScreen.storyboard */,
-				BFD945EC244DC5EB0012785A /* Info.plist */,
-			);
-			path = iOSEngineerCodeCheck;
 			sourceTree = "<group>";
 		};
 		BFD945F4244DC5EB0012785A /* iOSEngineerCodeCheckTests */ = {
@@ -159,6 +129,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				B6A008D02E68A859003B2E72 /* iOSEngineerCodeCheck */,
 			);
 			name = iOSEngineerCodeCheck;
 			productName = iOSEngineerCodeCheck;
@@ -250,9 +223,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BFD945EB244DC5EB0012785A /* LaunchScreen.storyboard in Resources */,
-				BFD945E8244DC5EB0012785A /* Assets.xcassets in Resources */,
-				BFD945E6244DC5E80012785A /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,12 +247,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BFD945E3244DC5E80012785A /* SearchGitHubListViewController.swift in Sources */,
-				BF0A658D244F2A3B00280FA6 /* SearchedGitHubViewController.swift in Sources */,
-				B6A008A02E6898F1003B2E72 /* String+.swift in Sources */,
-				BFD945DF244DC5E80012785A /* AppDelegate.swift in Sources */,
-				B6A008A22E689A20003B2E72 /* Collection+.swift in Sources */,
-				BFD945E1244DC5E80012785A /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,25 +280,6 @@
 			targetProxy = BFD945FD244DC5EB0012785A /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
-
-/* Begin PBXVariantGroup section */
-		BFD945E4244DC5E80012785A /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				BFD945E5244DC5E80012785A /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		BFD945E9244DC5EB0012785A /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				BFD945EA244DC5EB0012785A /* Base */,
-			);
-			name = LaunchScreen.storyboard;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		BFD94603244DC5EC0012785A /* Debug */ = {
@@ -494,7 +439,6 @@
 		BFD94609244DC5EC0012785A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S7G9J68NLX;
@@ -515,7 +459,6 @@
 		BFD9460A244DC5EC0012785A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S7G9J68NLX;
@@ -536,7 +479,6 @@
 		BFD9460C244DC5EC0012785A /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S7G9J68NLX;
 				INFOPLIST_FILE = iOSEngineerCodeCheckUITests/Info.plist;
@@ -556,7 +498,6 @@
 		BFD9460D244DC5EC0012785A /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = S7G9J68NLX;
 				INFOPLIST_FILE = iOSEngineerCodeCheckUITests/Info.plist;

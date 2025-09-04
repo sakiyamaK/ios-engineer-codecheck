@@ -13,11 +13,11 @@ extension String {
         url(withQueryItemDic: [:])
     }
     
-    func url(withQueryItemDic: [String: String]) -> URL? {
+    func url(withQueryItemDic dic: [String: String]) -> URL? {
         guard var components = URLComponents(string: self) else {
             return nil
         }
-        components.queryItems = withQueryItemDic.compactMap {
+        components.queryItems = dic.compactMap {
             URLQueryItem(name: $0.key, value: $0.value)
         }
         return components.url

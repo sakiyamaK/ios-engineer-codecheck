@@ -10,15 +10,22 @@ import UIKit
 
 final class SearchedGitHubViewController: UIViewController {
 
-    static func instantiate(selectRepogitory: SearchedGitHubModel) -> SearchedGitHubViewController {
+    deinit {
+        print("[\(#file)] \(#function)")
+    }
+
+    private var viewModel: SearchedGitHubViewModel!
+    private var router: SearchedGitHubRouter!
+
+    static func instantiate(viewModel: SearchedGitHubViewModel) -> SearchedGitHubViewController {
         let vc = UIStoryboard(name: "SearchedGitHubViewController", bundle: nil).instantiateInitialViewController() as! SearchedGitHubViewController
         vc.title = "検索結果"
-        vc.selectRepogitory = selectRepogitory
+        vc.viewModel = viewModel
         return vc
     }
 
-    deinit {
-        print("[\(#file)] \(#function): \(#line)")
+    func set(router: SearchedGitHubRouter) {
+        self.router = router
     }
 
     @IBOutlet private weak var avaterImageView: UIImageView!
@@ -28,7 +35,6 @@ final class SearchedGitHubViewController: UIViewController {
     @IBOutlet private weak var watcherCountLabel: UILabel!
     @IBOutlet private weak var forkCountLabel: UILabel!
     @IBOutlet private weak var issueCountLabel: UILabel!
-    
     @IBOutlet private weak var mainStackView: UIStackView! {
         didSet {
             // Interaface Builderで設定できないパラメータを初期化
@@ -37,54 +43,51 @@ final class SearchedGitHubViewController: UIViewController {
         }
     }
 
-    private var selectRepogitory: SearchedGitHubModel?
-
-    private var task: Task<Void, Never>?
+    private let indicator = UIActivityIndicatorView(style: .large)
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        guard let selectRepogitory else {
-            // 本来はアラートを出す
-            print("selectRepogitory is empty")
-            self.navigationController?.popViewController(animated: true)
-            return
+        if viewModel == nil {
+            fatalError("viewModel is nil. please run instantiate(viewModel: SearchGitHubListViewModel)")
+        }
+        if router == nil {
+            fatalError("router is nil. please run set(router: SearchGitHubListRouter)")
         }
 
-        updateUI(repogigory: selectRepogitory)
-    }
+        avaterImageView.addSubview(indicator)
+        avaterImageView.applyCenterConstraints(view: indicator)
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        task?.cancel()
-        task = nil
+        bind()
     }
 }
 
 private extension SearchedGitHubViewController {
-    func updateUI(repogigory: SearchedGitHubModel) {
-        langLabel.text = repogigory.langLabelText
-        starCountLabel.text = repogigory.stargazersCountLabelText
-        watcherCountLabel.text = repogigory.wwacherCountLabelText
-        forkCountLabel.text = repogigory.forkCountLabelText
-        issueCountLabel.text = repogigory.issueCountLabelText
-        titleLabel.text = repogigory.titleLabelText
-
-        task?.cancel()
-        task = Task {
-            do {
-                guard let image = try await repogigory.owner?.getImage() else {
-                    // avatarが設定されていないこともありエラーではないためアラートは出さなくてもいい
-                    return
-                }
-                avaterImageView.image = image
-            } catch {
-                print(error.localizedDescription)
+    func bind() {
+        self.tracking {[weak self] in
+            self?.viewModel.repogitory
+        } onChange: { _self, repogitory in
+            _self.langLabel.text = repogitory.langLabelText
+            _self.starCountLabel.text = repogitory.stargazersCountLabelText
+            _self.watcherCountLabel.text = repogitory.wwacherCountLabelText
+            _self.forkCountLabel.text = repogitory.forkCountLabelText
+            _self.issueCountLabel.text = repogitory.issueCountLabelText
+            _self.titleLabel.text = repogitory.titleLabelText
+        }.trackingOptional {[weak self] in
+            self?.viewModel.image
+        } onChange: { _self, image in
+            _self.avaterImageView.image = image
+        }.tracking {[weak self] in
+            self?.viewModel.loading
+        } onChange: { _self, loading in
+            if loading {
+                _self.indicator.startAnimating()
+            } else {
+                _self.indicator.stopAnimating()
             }
         }
     }
 }
-
 
 private extension SearchedGitHubModel {
     var langLabelText: String {

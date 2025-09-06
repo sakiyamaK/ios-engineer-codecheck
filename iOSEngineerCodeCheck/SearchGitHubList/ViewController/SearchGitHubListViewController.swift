@@ -10,62 +10,92 @@ import UIKit
 
 final class SearchGitHubListViewController: UITableViewController {
 
-    static func instantiate() -> SearchGitHubListViewController {
+    private var viewModel: SearchGitHubListViewModel!
+    private var router: SearchGitHubListRouter!
+
+    @MainActor
+    static func instantiate(viewModel: SearchGitHubListViewModel) -> SearchGitHubListViewController {
         let vc = UIStoryboard(name: "SearchGitHubListViewController", bundle: nil).instantiateInitialViewController() as! SearchGitHubListViewController
+        vc.viewModel = viewModel
         vc.title = "検索"
         return vc
     }
 
+    func set(router: SearchGitHubListRouter) {
+        self.router = router
+    }
+
     deinit {
-        print("[\(#file)] \(#function): \(#line)")
+        print("[\(#file)] \(#function)")
     }
 
     private let cellIdentifier: String = "Repository"
 
     @IBOutlet private weak var searchBar: UISearchBar!
-    
-    private var repogitories: [SearchedGitHubModel] = []
 
-    private var task: Task<Void, Never>?
+    private let indicator = UIActivityIndicatorView(style: .large)
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        if viewModel == nil {
+            fatalError("viewModel is nil. please run instantiate(viewModel: SearchGitHubListViewModel)")
+        }
+        if router == nil {
+            fatalError("router is nil. please run set(router: SearchGitHubListRouter)")
+        }
         // Do any additional setup after loading the view.
         searchBar.text = "GitHubのリポジトリを検索できるよー"
         searchBar.delegate = self
-    }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        task?.cancel()
-        task = nil
+        self.view.addSubview(indicator)
+        self.view.applyCenterConstraints(view: indicator)
+
+        bind()
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return repogitories.count
+        return viewModel.repogitories.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard
-            let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier),
-            let repository = repogitories[safe: indexPath.row] else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) else {
             // クラッシュログをサーバーにあげる
             fatalError()
         }
-        cell.textLabel?.text = repository.language
-        cell.detailTextLabel?.text = repository.fullName
-        cell.tag = indexPath.row
-        return cell
-        
+        return cell.trackingOptional {[weak self] in
+            self?.viewModel.repogitories[safe: indexPath.row]
+        } onChange: { cell, repogitory in
+            cell.textLabel?.text = repogitory?.language ?? ""
+            cell.detailTextLabel?.text = repogitory?.fullName ?? ""
+            cell.tag = indexPath.row
+        }
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        guard let selectepogitory = repogitories[safe: indexPath.row] else {
+        guard let selectepogitory = viewModel.repogitories[safe: indexPath.row] else {
             // 本来はアラートを出す
             return
         }
-        let nextVC = SearchedGitHubViewController.instantiate(selectRepogitory: selectepogitory)
-        self.navigationController?.pushViewController(nextVC, animated: true)
+        router.pushToDetail(model: selectepogitory)
+    }
+}
+
+private extension SearchGitHubListViewController {
+    func bind() {
+        self.tracking {[weak self] in
+            self?.viewModel.repogitories
+        } onChange: { _self, _ in
+            _self.tableView.reloadData()
+        }.tracking {[weak self] in
+            self?.viewModel.loading
+        } onChange: { _self, loading in
+            if loading {
+                _self.indicator.startAnimating()
+            } else {
+                _self.indicator.stopAnimating()
+            }
+        }
     }
 }
 
@@ -77,26 +107,24 @@ extension SearchGitHubListViewController: UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        task?.cancel()
+        viewModel.cancelSearch()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
-        guard let searchWord = searchBar.text, !searchWord.isEmpty else {
-            // 本来はアラートを出す
-            return
-        }
-
-        task?.cancel()
-        task = Task {
+        Task {
             do {
-                self.repogitories = try await API.shared.searchRepogitories(q: searchWord)
-                self.tableView.reloadData()
+                try await viewModel.search(text: searchBar.text)
             } catch {
-                // 本来はアラートを出す
-                print(error.localizedDescription)
+                print(error)
             }
         }
-
     }
 }
+
+//private extension UITableViewCell {
+//    func updateUI(repository: SearchedGitHubModel, indexPath: IndexPath) {
+//        self.textLabel?.text = repository.language
+//        self.detailTextLabel?.text = repository.fullName
+//        self.tag = indexPath.row
+//    }
+//}

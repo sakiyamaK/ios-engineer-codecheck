@@ -60,6 +60,17 @@ final class SearchedGitHubViewController: UIViewController {
 
         bind()
     }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        Task {
+            do {
+                try await viewModel.fetchImage()
+            } catch {
+                self.alert(message: error.localizedDescription)
+            }
+        }
+    }
 }
 
 private extension SearchedGitHubViewController {

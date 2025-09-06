@@ -74,7 +74,7 @@ final class SearchGitHubListViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let selectepogitory = viewModel.repogitories[safe: indexPath.row] else {
-            // 本来はアラートを出す
+            self.alert(message: ServiceError.unknown.localizedDescription)
             return
         }
         router.pushToDetail(model: selectepogitory)
@@ -115,16 +115,8 @@ extension SearchGitHubListViewController: UISearchBarDelegate {
             do {
                 try await viewModel.search(text: searchBar.text)
             } catch {
-                print(error)
+                self.alert(message: error.localizedDescription)
             }
         }
     }
 }
-
-//private extension UITableViewCell {
-//    func updateUI(repository: SearchedGitHubModel, indexPath: IndexPath) {
-//        self.textLabel?.text = repository.language
-//        self.detailTextLabel?.text = repository.fullName
-//        self.tag = indexPath.row
-//    }
-//}

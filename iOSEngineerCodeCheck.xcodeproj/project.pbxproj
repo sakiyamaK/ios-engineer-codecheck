@@ -6,11 +6,6 @@
 	objectVersion = 70;
 	objects = {
 
-/* Begin PBXBuildFile section */
-		BFD945F6244DC5EB0012785A /* iOSEngineerCodeCheckTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD945F5244DC5EB0012785A /* iOSEngineerCodeCheckTests.swift */; };
-		BFD94601244DC5EC0012785A /* iOSEngineerCodeCheckUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFD94600244DC5EC0012785A /* iOSEngineerCodeCheckUITests.swift */; };
-/* End PBXBuildFile section */
-
 /* Begin PBXContainerItemProxy section */
 		BFD945F2244DC5EB0012785A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -31,11 +26,7 @@
 /* Begin PBXFileReference section */
 		BFD945DB244DC5E80012785A /* iOSEngineerCodeCheck.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = iOSEngineerCodeCheck.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFD945F1244DC5EB0012785A /* iOSEngineerCodeCheckTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOSEngineerCodeCheckTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		BFD945F5244DC5EB0012785A /* iOSEngineerCodeCheckTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSEngineerCodeCheckTests.swift; sourceTree = "<group>"; };
-		BFD945F7244DC5EB0012785A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BFD945FC244DC5EB0012785A /* iOSEngineerCodeCheckUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = iOSEngineerCodeCheckUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		BFD94600244DC5EC0012785A /* iOSEngineerCodeCheckUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSEngineerCodeCheckUITests.swift; sourceTree = "<group>"; };
-		BFD94602244DC5EC0012785A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -46,10 +37,27 @@
 			);
 			target = BFD945DA244DC5E80012785A /* iOSEngineerCodeCheck */;
 		};
+		B6F78AAD2E6C210D00AD00E5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				SearchedGitHub/SearchedGitHubViewModelTests.swift,
+				SearchGitHubListTest/SearchGitHubListViewModelTests.swift,
+			);
+			target = BFD945F0244DC5EB0012785A /* iOSEngineerCodeCheckTests */;
+		};
+		B6F78AB22E6C211200AD00E5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				iOSEngineerCodeCheckUITests.swift,
+			);
+			target = BFD945FB244DC5EB0012785A /* iOSEngineerCodeCheckUITests */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		B6A008D02E68A859003B2E72 /* iOSEngineerCodeCheck */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (B6A008DD2E68A859003B2E72 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = iOSEngineerCodeCheck; sourceTree = "<group>"; };
+		B6F78AAA2E6C210D00AD00E5 /* iOSEngineerCodeCheckTests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (B6F78AAD2E6C210D00AD00E5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = iOSEngineerCodeCheckTests; sourceTree = "<group>"; };
+		B6F78AB02E6C211200AD00E5 /* iOSEngineerCodeCheckUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (B6F78AB22E6C211200AD00E5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = iOSEngineerCodeCheckUITests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,8 +89,8 @@
 			isa = PBXGroup;
 			children = (
 				B6A008D02E68A859003B2E72 /* iOSEngineerCodeCheck */,
-				BFD945F4244DC5EB0012785A /* iOSEngineerCodeCheckTests */,
-				BFD945FF244DC5EB0012785A /* iOSEngineerCodeCheckUITests */,
+				B6F78AAA2E6C210D00AD00E5 /* iOSEngineerCodeCheckTests */,
+				B6F78AB02E6C211200AD00E5 /* iOSEngineerCodeCheckUITests */,
 				BFD945DC244DC5E80012785A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -95,24 +103,6 @@
 				BFD945FC244DC5EB0012785A /* iOSEngineerCodeCheckUITests.xctest */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		BFD945F4244DC5EB0012785A /* iOSEngineerCodeCheckTests */ = {
-			isa = PBXGroup;
-			children = (
-				BFD945F5244DC5EB0012785A /* iOSEngineerCodeCheckTests.swift */,
-				BFD945F7244DC5EB0012785A /* Info.plist */,
-			);
-			path = iOSEngineerCodeCheckTests;
-			sourceTree = "<group>";
-		};
-		BFD945FF244DC5EB0012785A /* iOSEngineerCodeCheckUITests */ = {
-			isa = PBXGroup;
-			children = (
-				BFD94600244DC5EC0012785A /* iOSEngineerCodeCheckUITests.swift */,
-				BFD94602244DC5EC0012785A /* Info.plist */,
-			);
-			path = iOSEngineerCodeCheckUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -256,7 +246,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BFD945F6244DC5EB0012785A /* iOSEngineerCodeCheckTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,7 +253,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BFD94601244DC5EC0012785A /* iOSEngineerCodeCheckUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

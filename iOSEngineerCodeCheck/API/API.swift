@@ -9,17 +9,16 @@
 import Foundation
 
 protocol APIProtocol {
-    var jsonDecoder: JSONDecoder { get }
+    static var jsonDecoder: JSONDecoder { get }
     func searchRepogitories(q: String) async throws -> [SearchGitHubListModel]
 }
 extension APIProtocol {
-    var jsonDecoder: JSONDecoder {
+    static var jsonDecoder: JSONDecoder {
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         return decoder
     }
 }
-
 
 final class API: APIProtocol {
     static let shared = API()
@@ -33,7 +32,34 @@ final class API: APIProtocol {
         }
 
         let (data, _) = try await URLSession.shared.data(from: url)
-        let dto = try jsonDecoder.decode(SearchRepogitoriesDTO.self, from: data)
+        let dto = try API.jsonDecoder.decode(SearchRepogitoriesDTO.self, from: data)
         return dto.items
     }
 }
+
+#if DEBUG
+// MARK: - Mock Objects
+
+final class MockAPI: APIProtocol {
+    private var result: Result<[SearchGitHubListModel], Error>
+
+    private(set) var callCount = 0
+    private(set) var receivedQuery: String?
+
+    init(result: Result<[SearchGitHubListModel], Error>) {
+        self.result = result
+    }
+
+    func searchRepogitories(q: String) async throws -> [SearchGitHubListModel] {
+        callCount += 1
+        receivedQuery = q
+        try await Task.sleep(for: .milliseconds(100))
+        switch result {
+        case .success(let models):
+            return models
+        case .failure(let error):
+            throw error
+        }
+    }
+}
+#endif

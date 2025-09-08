@@ -1,16 +1,11 @@
 
 import UIKit
 
-// ServiceErrorが他の場所で定義されていることを想定
-// enum ServiceError: Error {
-//     case decodeImage
-// }
-
 protocol ImageFetcher {
     func fetchImage(from url: URL) async throws -> UIImage
 }
 
-struct DefaultImageFetcher: ImageFetcher {
+final class DefaultImageFetcher: ImageFetcher {
     func fetchImage(from url: URL) async throws -> UIImage {
         let (data, response) = try await URLSession.shared.data(from: url)
         
@@ -24,3 +19,26 @@ struct DefaultImageFetcher: ImageFetcher {
         return image
     }
 }
+
+// MARK: - Mock Objects
+#if DEBUG
+final class MockImageFetcher: ImageFetcher {
+    private var result: Result<UIImage, Error>
+    private(set) var callCount = 0
+
+    init(result: Result<UIImage, Error>) {
+        self.result = result
+    }
+
+    func fetchImage(from url: URL) async throws -> UIImage {
+        self.callCount += 1
+        try await Task.sleep(for: .milliseconds(100))
+        switch result {
+        case .success(let image):
+            return image
+        case .failure(let error):
+            throw error
+        }
+    }
+}
+#endif

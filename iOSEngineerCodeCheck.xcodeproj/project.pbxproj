@@ -30,6 +30,22 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		B69334312E6E9E8400B54D20 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				SearchGitHubDetail/SearchGitHubDetailViewModelTests.swift,
+				SearchGitHubListTest/SearchGitHubListViewModelTests.swift,
+			);
+			target = BFD945F0244DC5EB0012785A /* iOSEngineerCodeCheckTests */;
+		};
+		B69334782E6EAC7900B54D20 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				ForUITest/ProcessInfoForUITest.swift,
+				ForUITest/SearchGitHubListAccessibilityIdentifier.swift,
+			);
+			target = BFD945FB244DC5EB0012785A /* iOSEngineerCodeCheckUITests */;
+		};
 		B6A008DD2E68A859003B2E72 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -37,26 +53,18 @@
 			);
 			target = BFD945DA244DC5E80012785A /* iOSEngineerCodeCheck */;
 		};
-		B6F78AAD2E6C210D00AD00E5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				SearchedGitHub/SearchedGitHubViewModelTests.swift,
-				SearchGitHubListTest/SearchGitHubListViewModelTests.swift,
-			);
-			target = BFD945F0244DC5EB0012785A /* iOSEngineerCodeCheckTests */;
-		};
 		B6F78AB22E6C211200AD00E5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				iOSEngineerCodeCheckUITests.swift,
+				SearchGitHubListUITest/SearchGitHubListViewControllerTest.swift,
 			);
 			target = BFD945FB244DC5EB0012785A /* iOSEngineerCodeCheckUITests */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		B6A008D02E68A859003B2E72 /* iOSEngineerCodeCheck */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (B6A008DD2E68A859003B2E72 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = iOSEngineerCodeCheck; sourceTree = "<group>"; };
-		B6F78AAA2E6C210D00AD00E5 /* iOSEngineerCodeCheckTests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (B6F78AAD2E6C210D00AD00E5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = iOSEngineerCodeCheckTests; sourceTree = "<group>"; };
+		B6A008D02E68A859003B2E72 /* iOSEngineerCodeCheck */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (B6A008DD2E68A859003B2E72 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, B69334782E6EAC7900B54D20 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = iOSEngineerCodeCheck; sourceTree = "<group>"; };
+		B6F78AAA2E6C210D00AD00E5 /* iOSEngineerCodeCheckTests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (B69334312E6E9E8400B54D20 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = iOSEngineerCodeCheckTests; sourceTree = "<group>"; };
 		B6F78AB02E6C211200AD00E5 /* iOSEngineerCodeCheckUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (B6F78AB22E6C211200AD00E5 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = iOSEngineerCodeCheckUITests; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 

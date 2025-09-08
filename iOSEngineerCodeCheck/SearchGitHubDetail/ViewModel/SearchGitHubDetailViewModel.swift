@@ -1,5 +1,5 @@
 //
-//  SearchedGitHubViewModel.swift
+//  SearchGitHubDetailViewModel.swift
 //  iOSEngineerCodeCheck
 //
 //  Created by sakiyamaK on 2025/09/06.
@@ -10,21 +10,21 @@ import UIKit
 import Observation
 
 @MainActor
-protocol SearchedGitHubViewModel {
+protocol SearchGitHubDetailViewModel {
     var loading: Bool { get }
-    var repogitory: SearchedGitHubModel { get }
+    var repogitory: SearchGitHubDetailModel { get }
     var image: UIImage? { get }
     func fetchImage() async throws
 }
 
 @Observable
-final class SearchedGitHubViewModelImpl: SearchedGitHubViewModel {
+final class SearchGitHubDetailViewModelImpl: SearchGitHubDetailViewModel {
 
     deinit {
         print("[\(#file)] \(#function)")
     }
 
-    private(set) var repogitory: SearchedGitHubModel
+    private(set) var repogitory: SearchGitHubDetailModel
     private(set) var image: UIImage?
     var loading: Bool {
         task != nil
@@ -33,7 +33,7 @@ final class SearchedGitHubViewModelImpl: SearchedGitHubViewModel {
     private var task: Task<Void, Error>?
     private let imageFetcher: ImageFetcher
 
-    init(repogitory: SearchedGitHubModel, imageFetcher: ImageFetcher = DefaultImageFetcher()) {
+    init(repogitory: SearchGitHubDetailModel, imageFetcher: ImageFetcher = DefaultImageFetcher()) {
         self.repogitory = repogitory
         self.imageFetcher = imageFetcher
     }

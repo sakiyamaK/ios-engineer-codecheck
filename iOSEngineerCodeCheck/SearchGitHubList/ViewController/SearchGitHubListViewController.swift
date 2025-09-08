@@ -31,9 +31,17 @@ final class SearchGitHubListViewController: UITableViewController {
 
     private let cellIdentifier: String = "Repository"
 
-    @IBOutlet private weak var searchBar: UISearchBar!
+    @IBOutlet private weak var searchBar: UISearchBar! {
+        didSet {
+            searchBar.accessibilityIdentifier = SearchGitHubListAccessibilityIdentifier.searchBar.rawValue
+        }
+    }
 
-    private let indicator = UIActivityIndicatorView(style: .large)
+    private let indicator = {
+        let v = UIActivityIndicatorView(style: .large)
+        v.accessibilityIdentifier = SearchGitHubListAccessibilityIdentifier.indicator.rawValue
+        return v
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()

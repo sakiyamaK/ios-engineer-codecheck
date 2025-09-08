@@ -8,23 +8,23 @@
 
 import UIKit
 
-final class SearchedGitHubViewController: UIViewController {
+final class SearchGitHubDetailViewController: UIViewController {
 
     deinit {
         print("[\(#file)] \(#function)")
     }
 
-    private var viewModel: SearchedGitHubViewModel!
-    private var router: SearchedGitHubRouter!
+    private var viewModel: SearchGitHubDetailViewModel!
+    private var router: SearchGitHubDetailRouter!
 
-    static func instantiate(viewModel: SearchedGitHubViewModel) -> SearchedGitHubViewController {
-        let vc = UIStoryboard(name: "SearchedGitHubViewController", bundle: nil).instantiateInitialViewController() as! SearchedGitHubViewController
+    static func instantiate(viewModel: SearchGitHubDetailViewModel) -> SearchGitHubDetailViewController {
+        let vc = UIStoryboard(name: "SearchGitHubDetailViewController", bundle: nil).instantiateInitialViewController() as! SearchGitHubDetailViewController
         vc.title = "検索結果"
         vc.viewModel = viewModel
         return vc
     }
 
-    func set(router: SearchedGitHubRouter) {
+    func set(router: SearchGitHubDetailRouter) {
         self.router = router
     }
 
@@ -73,7 +73,7 @@ final class SearchedGitHubViewController: UIViewController {
     }
 }
 
-private extension SearchedGitHubViewController {
+private extension SearchGitHubDetailViewController {
     func bind() {
         self.tracking {[weak self] in
             self?.viewModel.repogitory
@@ -100,7 +100,7 @@ private extension SearchedGitHubViewController {
     }
 }
 
-private extension SearchedGitHubModel {
+private extension SearchGitHubDetailModel {
     var langLabelText: String {
         "Written in \(self.language)"
     }
@@ -120,3 +120,30 @@ private extension SearchedGitHubModel {
         self.fullName
     }
 }
+
+// MARK: - Test Data
+#if DEBUG
+extension SearchGitHubDetailModel {
+    static var mock: Self {
+        let mockRepoJSON = """
+    {
+      "id": 1,
+      "full_name": "apple/swift",
+      "language": "C++",
+      "stargazers_count": 60000,
+      "watchers_count": 7000,
+      "forks_count": 9000,
+      "open_issues_count": 600,
+      "owner": {
+        "id": 10639145,
+        "avatar_url": "https://avatars.githubusercontent.com/u/10639145?v=4"
+      }
+    }
+    """.data(using: .utf8)!
+
+        return try! API.jsonDecoder.decode(Self.self, from: mockRepoJSON)
+    }
+}
+#endif
+
+

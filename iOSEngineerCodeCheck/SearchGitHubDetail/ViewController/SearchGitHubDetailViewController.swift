@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import DeclarativeUIKit
+import ObservableUIKit
 
 final class SearchGitHubDetailViewController: UIViewController {
 
@@ -18,7 +20,7 @@ final class SearchGitHubDetailViewController: UIViewController {
     private var router: SearchGitHubDetailRouter!
 
     static func instantiate(viewModel: SearchGitHubDetailViewModel) -> SearchGitHubDetailViewController {
-        let vc = UIStoryboard(name: "SearchGitHubDetailViewController", bundle: nil).instantiateInitialViewController() as! SearchGitHubDetailViewController
+        let vc = SearchGitHubDetailViewController()
         vc.title = "検索結果"
         vc.viewModel = viewModel
         return vc
@@ -28,25 +30,8 @@ final class SearchGitHubDetailViewController: UIViewController {
         self.router = router
     }
 
-    @IBOutlet private weak var avaterImageView: UIImageView!
-    @IBOutlet private weak var titleLabel: UILabel!
-    @IBOutlet private weak var langLabel: UILabel!
-    @IBOutlet private weak var starCountLabel: UILabel!
-    @IBOutlet private weak var watcherCountLabel: UILabel!
-    @IBOutlet private weak var forkCountLabel: UILabel!
-    @IBOutlet private weak var issueCountLabel: UILabel!
-    @IBOutlet private weak var mainStackView: UIStackView! {
-        didSet {
-            // Interaface Builderで設定できないパラメータを初期化
-            mainStackView.isLayoutMarginsRelativeArrangement = true
-            mainStackView.layoutMargins = .init(top: 55, left: 24, bottom: 0, right: 24)
-        }
-    }
-
-    private let indicator = UIActivityIndicatorView(style: .large)
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    override func loadView() {
+        super.loadView()
 
         if viewModel == nil {
             fatalError("viewModel is nil. please run instantiate(viewModel: SearchGitHubListViewModel)")
@@ -55,10 +40,85 @@ final class SearchGitHubDetailViewController: UIViewController {
             fatalError("router is nil. please run set(router: SearchGitHubListRouter)")
         }
 
-        avaterImageView.addSubview(indicator)
-        avaterImageView.applyCenterConstraints(view: indicator)
+        self.view.backgroundColor = .systemBackground
 
-        bind()
+        self.declarative {
+            UIScrollView {
+                UIStackView(spacing: 22) {
+                    UIImageView()
+                        .contentMode(.scaleAspectFit)
+                        .aspectRatio(1.0)
+                        .trackingOptional({[weak self] in
+                            self!.viewModel.image
+                        }, to: \.image)
+                        .zStack {
+                            UIActivityIndicatorView(style: .large)
+                                .tracking {[weak self] in
+                                    self!.viewModel.loading
+                                } onChange: { indicator, loading in
+                                    if loading {
+                                        indicator.startAnimating()
+                                    } else {
+                                        indicator.stopAnimating()
+                                    }
+                                }
+                        }
+
+                    UILabel()
+                        .textAlignment(.center)
+                        .contentPriorities(.init(vertical: .required))
+                        .font(UIFont.preferredFont(forTextStyle: .title1))
+                        .tracking({[weak self] in
+                            self!.viewModel.repogitory.titleLabelText
+                        }, to: \.text)
+
+                    UIStackView.horizontal(alignment: .top) {
+                        UILabel()
+                            .contentPriorities(.init(all: .required))
+                            .font(UIFont.preferredFont(forTextStyle: .headline))
+                            .tracking({[weak self] in
+                                self!.viewModel.repogitory.langLabelText
+                            }, to: \.text)
+
+                        UIView.spacer()
+
+                        UIStackView(alignment: .trailing, spacing: 16) {
+                            UILabel()
+                                .contentPriorities(.init(all: .required))
+                                .font(UIFont.preferredFont(forTextStyle: .subheadline))
+                                .tracking({[weak self] in
+                                    self!.viewModel.repogitory.stargazersCountLabelText
+                                }, to: \.text)
+
+                            UILabel()
+                                .contentPriorities(.init(all: .required))
+                                .font(UIFont.preferredFont(forTextStyle: .subheadline))
+                                .tracking({[weak self] in
+                                    self!.viewModel.repogitory.wwacherCountLabelText
+                                }, to: \.text)
+
+                            UILabel()
+                                .contentPriorities(.init(all: .required))
+                                .font(UIFont.preferredFont(forTextStyle: .subheadline))
+                                .tracking({[weak self] in
+                                    self!.viewModel.repogitory.forkCountLabelText
+                                }, to: \.text)
+
+                            UILabel()
+                                .contentPriorities(.init(all: .required))
+                                .font(UIFont.preferredFont(forTextStyle: .subheadline))
+                                .tracking({[weak self] in
+                                    self!.viewModel.repogitory.issueCountLabelText
+                                }, to: \.text)
+                        }
+                    }
+
+                }
+                .margins(
+                    .init(top: 55, leading: 24, bottom: 0, trailing: 24)
+                )
+            }
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -68,33 +128,6 @@ final class SearchGitHubDetailViewController: UIViewController {
                 try await viewModel.fetchImage()
             } catch {
                 self.alert(message: error.localizedDescription)
-            }
-        }
-    }
-}
-
-private extension SearchGitHubDetailViewController {
-    func bind() {
-        self.tracking {[weak self] in
-            self?.viewModel.repogitory
-        } onChange: { _self, repogitory in
-            _self.langLabel.text = repogitory.langLabelText
-            _self.starCountLabel.text = repogitory.stargazersCountLabelText
-            _self.watcherCountLabel.text = repogitory.wwacherCountLabelText
-            _self.forkCountLabel.text = repogitory.forkCountLabelText
-            _self.issueCountLabel.text = repogitory.issueCountLabelText
-            _self.titleLabel.text = repogitory.titleLabelText
-        }.trackingOptional {[weak self] in
-            self?.viewModel.image
-        } onChange: { _self, image in
-            _self.avaterImageView.image = image
-        }.tracking {[weak self] in
-            self?.viewModel.loading
-        } onChange: { _self, loading in
-            if loading {
-                _self.indicator.startAnimating()
-            } else {
-                _self.indicator.stopAnimating()
             }
         }
     }
@@ -121,29 +154,8 @@ private extension SearchGitHubDetailModel {
     }
 }
 
-// MARK: - Test Data
-#if DEBUG
-extension SearchGitHubDetailModel {
-    static var mock: Self {
-        let mockRepoJSON = """
-    {
-      "id": 1,
-      "full_name": "apple/swift",
-      "language": "C++",
-      "stargazers_count": 60000,
-      "watchers_count": 7000,
-      "forks_count": 9000,
-      "open_issues_count": 600,
-      "owner": {
-        "id": 10639145,
-        "avatar_url": "https://avatars.githubusercontent.com/u/10639145?v=4"
-      }
-    }
-    """.data(using: .utf8)!
-
-        return try! API.jsonDecoder.decode(Self.self, from: mockRepoJSON)
-    }
+#Preview {
+    SearchGitHubDetailRouterImpl.makeModules(
+        repogitory: SearchRepogitoriesDTO.mockSuccess.items.first!
+    )
 }
-#endif
-
-

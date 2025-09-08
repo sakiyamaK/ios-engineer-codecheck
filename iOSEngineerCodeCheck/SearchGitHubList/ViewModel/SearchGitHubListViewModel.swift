@@ -5,8 +5,9 @@ import Observation
 protocol SearchGitHubListViewModel {
     var loading: Bool { get }
     var repogitories: [SearchGitHubListModel] { get }
-    func search(text searchText: String?) async throws
     func cancelSearch()
+    func search(text searchText: String?) async throws
+    func refresh() async throws
 }
 
 @Observable
@@ -28,11 +29,26 @@ final class SearchGitHubListViewModelImpl: SearchGitHubListViewModel {
         self.api = api
     }
 
+    func cancelSearch() {
+        task?.cancel()
+    }
+
     func search(text searchText: String?) async throws {
+        try await search(text: searchText, isRefresh: false)
+    }
+
+
+    func refresh() async throws {
+        try await search(text: _searchText, isRefresh: true)
+    }
+}
+
+private extension SearchGitHubListViewModelImpl {
+    func search(text searchText: String?, isRefresh: Bool) async throws {
         defer {
             task = nil
         }
-        guard let searchText, !searchText.isEmpty, _searchText != searchText else {
+        guard let searchText, !searchText.isEmpty, isRefresh || _searchText != searchText else {
             return
         }
         _searchText = searchText
@@ -44,9 +60,5 @@ final class SearchGitHubListViewModelImpl: SearchGitHubListViewModel {
 
         // 通信が終わったことを知らせる
         _ = try await task?.value
-    }
-
-    func cancelSearch() {
-        task?.cancel()
     }
 }

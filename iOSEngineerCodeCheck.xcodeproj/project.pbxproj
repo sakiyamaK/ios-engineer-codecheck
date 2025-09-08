@@ -6,6 +6,11 @@
 	objectVersion = 70;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		B69334ED2E6EC38000B54D20 /* DeclarativeUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = B69334EC2E6EC38000B54D20 /* DeclarativeUIKit */; };
+		B69334F02E6ECFCE00B54D20 /* ObservableUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = B69334EF2E6ECFCE00B54D20 /* ObservableUIKit */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		BFD945F2244DC5EB0012785A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -42,7 +47,6 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				ForUITest/ProcessInfoForUITest.swift,
-				ForUITest/SearchGitHubListAccessibilityIdentifier.swift,
 			);
 			target = BFD945FB244DC5EB0012785A /* iOSEngineerCodeCheckUITests */;
 		};
@@ -73,6 +77,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B69334F02E6ECFCE00B54D20 /* ObservableUIKit in Frameworks */,
+				B69334ED2E6EC38000B54D20 /* DeclarativeUIKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -206,6 +212,8 @@
 			);
 			mainGroup = BFD945D2244DC5E80012785A;
 			packageReferences = (
+				B69334EB2E6EC38000B54D20 /* XCLocalSwiftPackageReference "../../001_Library/DeclarativeUIKit" */,
+				B69334EE2E6ECFCE00B54D20 /* XCRemoteSwiftPackageReference "ObservableUIKit" */,
 			);
 			productRefGroup = BFD945DC244DC5E80012785A /* Products */;
 			projectDirPath = "";
@@ -552,6 +560,36 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		B69334EB2E6EC38000B54D20 /* XCLocalSwiftPackageReference "../../001_Library/DeclarativeUIKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../001_Library/DeclarativeUIKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B69334EE2E6ECFCE00B54D20 /* XCRemoteSwiftPackageReference "ObservableUIKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sakiyamaK/ObservableUIKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B69334EC2E6EC38000B54D20 /* DeclarativeUIKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = DeclarativeUIKit;
+		};
+		B69334EF2E6ECFCE00B54D20 /* ObservableUIKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B69334EE2E6ECFCE00B54D20 /* XCRemoteSwiftPackageReference "ObservableUIKit" */;
+			productName = ObservableUIKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = BFD945D3244DC5E80012785A /* Project object */;
 }

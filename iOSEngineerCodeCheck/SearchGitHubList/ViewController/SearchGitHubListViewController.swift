@@ -7,15 +7,16 @@
 //
 
 import UIKit
+import DeclarativeUIKit
 
-final class SearchGitHubListViewController: UITableViewController {
+final class SearchGitHubListViewController: UIViewController {
 
     private var viewModel: SearchGitHubListViewModel!
     private var router: SearchGitHubListRouter!
 
     @MainActor
     static func instantiate(viewModel: SearchGitHubListViewModel) -> SearchGitHubListViewController {
-        let vc = UIStoryboard(name: "SearchGitHubListViewController", bundle: nil).instantiateInitialViewController() as! SearchGitHubListViewController
+        let vc = SearchGitHubListViewController()
         vc.viewModel = viewModel
         vc.title = "検索"
         return vc
@@ -29,88 +30,121 @@ final class SearchGitHubListViewController: UITableViewController {
         print("[\(#file)] \(#function)")
     }
 
-    private let cellIdentifier: String = "Repository"
+    private var dataSource: UICollectionViewDiffableDataSource<Int, SearchGitHubListModel.ID>!
 
-    @IBOutlet private weak var searchBar: UISearchBar! {
-        didSet {
-            searchBar.accessibilityIdentifier = SearchGitHubListAccessibilityIdentifier.searchBar.rawValue
-        }
-    }
+    override func loadView() {
+        super.loadView()
 
-    private let indicator = {
-        let v = UIActivityIndicatorView(style: .large)
-        v.accessibilityIdentifier = SearchGitHubListAccessibilityIdentifier.indicator.rawValue
-        return v
-    }()
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
         if viewModel == nil {
             fatalError("viewModel is nil. please run instantiate(viewModel: SearchGitHubListViewModel)")
         }
         if router == nil {
             fatalError("router is nil. please run set(router: SearchGitHubListRouter)")
         }
-        // Do any additional setup after loading the view.
-        searchBar.text = "GitHubのリポジトリを検索できるよー"
-        searchBar.delegate = self
 
-        self.view.addSubview(indicator)
-        self.view.applyCenterConstraints(view: indicator)
+        self.view.backgroundColor = .systemBackground
 
-        bind()
-    }
+        self.declarative {
+            UIStackView {
+                UISearchBar()
+                    .placeholder("GitHubのリポジトリを検索できるよー")
+                    .apply {
+                        $0.accessibilityIdentifier = SearchGitHubListAccessibilityIdentifier.searchBar.rawValue
+                    }.delegate(self)
 
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.repogitories.count
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard
-            let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier) else {
-            // クラッシュログをサーバーにあげる
-            fatalError()
+                UICollectionView {
+                    UICollectionViewCompositionalLayout.list(
+                        using: .init(appearance: .plain)
+                    )
+                }.apply {[weak self] collectionView in
+
+                    guard let self else { return }
+
+                    // CellRegistrationを定義
+                    let itemCell = UICollectionView.CellRegistration<
+                        UICollectionViewListCell,
+                        SearchGitHubListModel
+                    > { cell, indexPath, item in
+                        var configuration = cell.defaultContentConfiguration()
+                        configuration.text = item.language
+                        configuration.secondaryText = item.fullName
+                        cell.contentConfiguration = configuration
+                    }
+
+                    // データソースを定義
+                    dataSource = UICollectionViewDiffableDataSource<Int, SearchGitHubListModel.ID>(collectionView: collectionView) {
+                        [weak self] collectionView, indexPath, cellIdentifier in
+                        return collectionView.dequeueConfiguredReusableCell(
+                            using: itemCell,
+                            for: indexPath,
+                            item: self!.viewModel.repogitories[id: cellIdentifier]
+                        )
+                    }
+                }
+                .tracking({[weak self] in
+                    self!.viewModel.repogitories
+                }, onChange: {[weak self] collectionView, repogitories in
+                    guard let self else { return }
+                    collectionView.refreshControl?.endRefreshing()
+                    var snapshot = NSDiffableDataSourceSnapshot<Int, SearchGitHubListModel.ID>()
+                    snapshot.appendSections([0])
+                    snapshot.appendItems(repogitories.compactMap(\.id))
+                    self.dataSource.apply(snapshot, animatingDifferences: true)
+                })
+                .delegate(self)
+                .refreshControl {
+                    let refreshControl = UIRefreshControl()
+                    return refreshControl.addAction(.valueChanged, handler: { [weak self] _ in
+                        Task {
+                            do {
+                                try await self!.viewModel.refresh()
+                                refreshControl.endRefreshing()
+                            } catch {
+                                self!.alert(message: error.localizedDescription)
+                            }
+                        }
+                    })
+                }
+            }
         }
-        return cell.trackingOptional {[weak self] in
-            self?.viewModel.repogitories[safe: indexPath.row]
-        } onChange: { cell, repogitory in
-            cell.textLabel?.text = repogitory?.language ?? ""
-            cell.detailTextLabel?.text = repogitory?.fullName ?? ""
-            cell.tag = indexPath.row
+        .declarative {
+            UIActivityIndicatorView(style: .large)
+                .apply { indicator in
+                    indicator.accessibilityIdentifier = SearchGitHubListAccessibilityIdentifier.indicator.rawValue
+                }
+                .tracking {[weak self] in
+                    self!.viewModel.loading
+                } onChange: { indicator, loading in
+                    if loading {
+                        indicator.startAnimating()
+                    } else {
+                        indicator.stopAnimating()
+                    }
+                }
         }
     }
-    
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+}
+
+extension SearchGitHubListViewController: UICollectionViewDataSourcePrefetching {
+    func collectionView(_ collectionView: UICollectionView, prefetchItemsAt indexPaths: [IndexPath]) {
+
+    }
+}
+
+extension SearchGitHubListViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let selectepogitory = viewModel.repogitories[safe: indexPath.row] else {
             self.alert(message: ServiceError.unknown.localizedDescription)
             return
         }
+        collectionView.deselectItem(at: indexPath, animated: true)
         router.pushToDetail(model: selectepogitory)
     }
 }
 
-private extension SearchGitHubListViewController {
-    func bind() {
-        self.tracking {[weak self] in
-            self?.viewModel.repogitories
-        } onChange: { _self, _ in
-            _self.tableView.reloadData()
-        }.tracking {[weak self] in
-            self?.viewModel.loading
-        } onChange: { _self, loading in
-            if loading {
-                _self.indicator.startAnimating()
-            } else {
-                _self.indicator.stopAnimating()
-            }
-        }
-    }
-}
 
 extension SearchGitHubListViewController: UISearchBarDelegate {
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
-        // ↓こうすれば初期のテキストを消せる
-        searchBar.text = ""
         return true
     }
     
@@ -128,3 +162,8 @@ extension SearchGitHubListViewController: UISearchBarDelegate {
         }
     }
 }
+
+#Preview {
+    SearchGitHubListRouterImpl.makeModulesForUITest()
+}
+

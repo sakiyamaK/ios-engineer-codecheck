@@ -5,8 +5,13 @@ import Observation
 protocol SearchGitHubListViewModel {
     var loading: Bool { get }
     var repogitories: [SearchGitHubListModel] { get }
-    func cancelSearch()
-    func search(text searchText: String?) async throws
+    var sortType: SearchGithubSortType { get }
+    var initialLoading: Bool { get }
+
+    func clearText()
+    func set(searchText: String?)
+    func search() async throws
+    func search(sortType: SearchGithubSortType) async throws
     func refresh() async throws
 }
 
@@ -15,11 +20,16 @@ final class SearchGitHubListViewModelImpl: SearchGitHubListViewModel {
     deinit {
         print("[\(#file)] \(#function)")
     }
-
-    private var _searchText: String = ""
+    private var _preSearchText: String?
+    private var _searchText: String?
+    private var _isRefresh: Bool = false
     private(set) var repogitories: [SearchGitHubListModel] = []
+    private(set) var sortType: SearchGithubSortType = .default
     var loading: Bool {
         task != nil
+    }
+    var initialLoading: Bool {
+        loading && !_isRefresh
     }
 
     private var task: Task<Void, Error>?
@@ -29,33 +39,70 @@ final class SearchGitHubListViewModelImpl: SearchGitHubListViewModel {
         self.api = api
     }
 
-    func cancelSearch() {
+    func clearText() {
         task?.cancel()
+        _searchText = nil
     }
 
-    func search(text searchText: String?) async throws {
-        try await search(text: searchText, isRefresh: false)
+    func set(searchText: String?){
+        _searchText = searchText
     }
 
+    func search() async throws {
+        try await search(
+            text: _searchText,
+            sortType: sortType,
+            isRefresh: false
+        )
+    }
+
+    func search(sortType: SearchGithubSortType) async throws {
+        try await search(
+            text: _searchText,
+            sortType: sortType,
+            isRefresh: false
+        )
+    }
 
     func refresh() async throws {
-        try await search(text: _searchText, isRefresh: true)
+        try await search(
+            text: _searchText,
+            sortType: sortType,
+            isRefresh: true
+        )
     }
+
 }
 
 private extension SearchGitHubListViewModelImpl {
-    func search(text searchText: String?, isRefresh: Bool) async throws {
+    func checkNessarySearch(seachText: String, sortType: SearchGithubSortType, isRefresh: Bool) -> Bool {
+        !seachText.isEmpty
+        && (
+            seachText != _preSearchText
+            || sortType != self.sortType
+            || isRefresh
+        )
+    }
+
+    func search(text searchText: String?, sortType: SearchGithubSortType, isRefresh: Bool) async throws {
         defer {
             task = nil
         }
-        guard let searchText, !searchText.isEmpty, isRefresh || _searchText != searchText else {
+        guard let searchText, checkNessarySearch(seachText: searchText, sortType: sortType, isRefresh: isRefresh) else {
             return
         }
-        _searchText = searchText
+        self._preSearchText = searchText
+        self.sortType = sortType
+        self._isRefresh = isRefresh
 
         task?.cancel()
         task = Task {
-            self.repogitories = try await api.searchRepogitories(q: searchText)
+            self.repogitories = try await api.searchRepogitories(
+                parameter: .init(
+                    q: searchText,
+                    sort: sortType
+                )
+            )
         }
 
         // 通信が終わったことを知らせる

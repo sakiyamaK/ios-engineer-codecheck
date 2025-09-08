@@ -8,9 +8,24 @@
 
 import Foundation
 
+struct SearchRepositoriesParameter: Equatable {
+    var q: String
+    var sort: SearchGithubSortType?
+    var queryITemDic: [String: String] {
+        [
+            "q": q,
+            "sort": sort?.rawValue
+        ].compactMapValues { $0 }
+    }
+
+    static func == (lhs: SearchRepositoriesParameter, rhs: SearchRepositoriesParameter) -> Bool {
+        lhs.q == rhs.q && lhs.sort == rhs.sort
+    }
+}
+
 protocol APIProtocol {
     static var jsonDecoder: JSONDecoder { get }
-    func searchRepogitories(q: String) async throws -> [SearchGitHubListModel]
+    func searchRepogitories(parameter: SearchRepositoriesParameter) async throws -> [SearchGitHubListModel]
 }
 extension APIProtocol {
     static var jsonDecoder: JSONDecoder {
@@ -26,8 +41,8 @@ final class API: APIProtocol {
     
     private let host: String = "https://api.github.com"
 
-    func searchRepogitories(q: String) async throws -> [SearchGitHubListModel] {
-        guard let url = "\(host)/search/repositories".url(withQueryItemDic: ["q": q]) else {
+    func searchRepogitories(parameter: SearchRepositoriesParameter) async throws -> [SearchGitHubListModel] {
+        guard let url = "\(host)/search/repositories".url(withQueryItemDic: parameter.queryITemDic) else {
             throw ServiceError.invalidURL
         }
 
@@ -44,15 +59,15 @@ final class MockAPI: APIProtocol {
     private var result: Result<[SearchGitHubListModel], Error>
 
     private(set) var callCount = 0
-    private(set) var receivedQuery: String?
+    private(set) var receivedParameter: SearchRepositoriesParameter?
 
     init(result: Result<[SearchGitHubListModel], Error>) {
         self.result = result
     }
 
-    func searchRepogitories(q: String) async throws -> [SearchGitHubListModel] {
+    func searchRepogitories(parameter: SearchRepositoriesParameter) async throws -> [SearchGitHubListModel] {
         callCount += 1
-        receivedQuery = q
+        receivedParameter = parameter
         try await Task.sleep(for: .milliseconds(100))
         switch result {
         case .success(let models):

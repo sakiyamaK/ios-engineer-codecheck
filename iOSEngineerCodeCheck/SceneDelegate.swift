@@ -20,7 +20,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
         let window = UIWindow(windowScene: windowScene)
+        #if DEBUG
+        if let uiTest =  ProcessInfo.processInfo.arguments.compactMap({ argument in
+            ProcessInfoForUITest.allCases.first(where: {$0.key == argument })
+        }).first {
+            switch uiTest {
+                case .searchGitHubList:
+                window.rootViewController = SearchGitHubListRouterImpl.makeModulesForUITest().withUINavigationController
+            case .SearchGitHubDetail:
+                window.rootViewController = SearchGitHubDetailRouterImpl.makeModulesForUITest().withUINavigationController
+            }
+        } else {
+            window.rootViewController = SearchGitHubListRouterImpl.makeModules().withUINavigationController
+        }
+        #else
         window.rootViewController = SearchGitHubListRouterImpl.makeModules().withUINavigationController
+        #endif
         window.makeKeyAndVisible()
         self.window = window
     }

@@ -37,8 +37,30 @@ final class SearchGitHubListRouterImpl {
 extension SearchGitHubListRouterImpl: SearchGitHubListRouter {
     func pushToDetail(model: SearchGitHubListModel) {
         guard let viewController, let nav = viewController.navigationController else { return }
-        let next = SearchedGitHubRouterImpl.makeModules(repogitory: model)
+        let next = SearchGitHubDetailRouterImpl.makeModules(repogitory: model)
         nav.pushViewController(next, animated: true)
     }
 }
 
+
+#if DEBUG
+
+extension SearchGitHubListRouter {
+    @MainActor
+    static func makeModulesForUITest() -> SearchGitHubListViewController {
+        let viewModel = SearchGitHubListViewModelImpl(
+            api: MockAPI(
+                result: .success(SearchRepogitoriesDTO.mockSuccess.items)
+            )
+        )
+        let vc = SearchGitHubListViewController.instantiate(viewModel: viewModel)
+        let router = MockSearchGitHubListRouter()
+        vc.set(router: router)
+        return vc
+    }
+}
+
+final class MockSearchGitHubListRouter: SearchGitHubListRouter {
+    func pushToDetail(model: SearchGitHubListModel) {}
+}
+#endif

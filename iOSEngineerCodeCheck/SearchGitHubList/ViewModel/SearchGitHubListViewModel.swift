@@ -1,11 +1,3 @@
-//
-//  SearchGitHubListViewModel.swift
-//  iOSEngineerCodeCheck
-//
-//  Created by sakiyamaK on 2025/09/04.
-//  Copyright © 2025 YUMEMI Inc. All rights reserved.
-//
-
 import Foundation
 import Observation
 
@@ -30,31 +22,28 @@ final class SearchGitHubListViewModelImpl: SearchGitHubListViewModel {
     }
 
     private var task: Task<Void, Error>?
+    private let api: APIProtocol
+
+    init(api: APIProtocol = API.shared) {
+        self.api = api
+    }
 
     func search(text searchText: String?) async throws {
-
+        defer {
+            task = nil
+        }
         guard let searchText, !searchText.isEmpty, _searchText != searchText else {
             return
         }
-
         _searchText = searchText
+
         task?.cancel()
         task = Task {
-            do {
-                let repogitories = try await API.shared.searchRepogitories(q: searchText)
-                await MainActor.run {
-                    self.repogitories = repogitories
-                }
-            } catch {
-                await MainActor.run {
-                    self.task = nil
-                }
-                throw error
-            }
-            await MainActor.run {
-                task = nil
-            }
+            self.repogitories = try await api.searchRepogitories(q: searchText)
         }
+
+        // 通信が終わったことを知らせる
+        _ = try await task?.value
     }
 
     func cancelSearch() {

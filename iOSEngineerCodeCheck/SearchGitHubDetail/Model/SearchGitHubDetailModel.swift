@@ -1,5 +1,5 @@
 //
-//  SearchedGitHubModel.swift
+//  SearchGitHubDetailModel.swift
 //  iOSEngineerCodeCheck
 //
 //  Created by sakiyamaK on 2025/09/04.
@@ -8,4 +8,4 @@
 
 import Foundation
 
-typealias SearchedGitHubModel = RepogitoryModel
+typealias SearchGitHubDetailModel = RepogitoryModel

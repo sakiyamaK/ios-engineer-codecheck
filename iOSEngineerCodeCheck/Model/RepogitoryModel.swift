@@ -70,21 +70,3 @@ extension Owner {
         avatarUrlStr?.url(withQueryItemDic: dic)
     }
 }
-
-// MARK: - UIKit
-import UIKit
-extension Owner {
-    func getImage() async throws -> UIImage? {
-        guard let avatarUrl else {
-            return nil
-        }
-        let (data, _) = try await URLSession.shared.data(from: avatarUrl)
-
-        guard let image = UIImage(data: data) else {
-            throw ServiceError.decodeImage
-        }
-
-        return image
-    }
-}
-

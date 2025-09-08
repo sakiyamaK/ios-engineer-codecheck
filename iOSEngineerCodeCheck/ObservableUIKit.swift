@@ -48,24 +48,6 @@ public extension ObservableUIKit {
         return self
     }
 
-    // 監視対象のパラメータがnilになったら停止する
-    @MainActor
-    @discardableResult
-    func tracking<T>(
-        useInitialValue: Bool = true,
-        sendOptional: Bool = false,
-        shouldStop: @escaping (@Sendable () -> Bool) = { false },
-        _ apply: @escaping @Sendable @MainActor () -> T?,
-        to : ReferenceWritableKeyPath<Self, T>
-    ) -> Self {
-        tracking(
-            useInitialValue: useInitialValue,
-            shouldStop: shouldStop,
-            apply) { _self, value in
-                _self[keyPath: to] = value
-            }
-    }
-
     // 監視対象のパラメータがnilになっても監視し続ける
     @MainActor
     @discardableResult
@@ -100,24 +82,6 @@ public extension ObservableUIKit {
             }
         })
         return self
-    }
-
-    // 監視対象のパラメータがnilになっても監視し続ける
-    @MainActor
-    @discardableResult
-    func trackingOptional<T>(
-        useInitialValue: Bool = true,
-        shouldStop: @escaping (@Sendable () -> Bool) = { false },
-        _ apply: @escaping @Sendable @MainActor () -> T?,
-        to: ReferenceWritableKeyPath<Self, T?>
-    ) -> Self {
-
-        trackingOptional(
-            useInitialValue: useInitialValue,
-            shouldStop: shouldStop,
-            apply) { _self, value in
-                _self[keyPath: to] = value
-            }
     }
 }
 

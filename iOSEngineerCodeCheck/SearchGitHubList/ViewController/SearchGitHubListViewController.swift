@@ -44,6 +44,34 @@ final class SearchGitHubListViewController: UIViewController {
 
         self.view.backgroundColor = .systemBackground
 
+        self.applyNavigationItem {
+            $0.rightBarButtonItem = UIBarButtonItem(
+                customView: UIButton(
+                    configuration:
+                            .plain()
+                            .title("並び替え")
+                )
+                .showsMenuAsPrimaryAction(true)
+                .menu(UIMenu(options: .displayInline, children: [
+                    UIDeferredMenuElement.uncached { completion in
+                        completion(SearchGithubSortType.allCases.compactMap {[weak self] sortType in
+                            UIAction(
+                                title: sortType.text,
+                                state: sortType == self!.viewModel.sortType ? .on : .off
+                            ) {[weak self] _ in
+                                Task {
+                                    do {
+                                        try await self!.viewModel.search(sortType: sortType)
+                                    } catch {
+                                        self!.alert(message: error.localizedDescription)
+                                    }
+                                }
+                            }
+                        })
+                    }
+                ]))
+            )
+        }
         self.declarative {
             UIStackView {
                 UISearchBar()
@@ -69,6 +97,7 @@ final class SearchGitHubListViewController: UIViewController {
                         configuration.text = item.language
                         configuration.secondaryText = item.fullName
                         cell.contentConfiguration = configuration
+
                     }
 
                     // データソースを定義
@@ -113,7 +142,7 @@ final class SearchGitHubListViewController: UIViewController {
                     indicator.accessibilityIdentifier = SearchGitHubListAccessibilityIdentifier.indicator.rawValue
                 }
                 .tracking {[weak self] in
-                    self!.viewModel.loading
+                    self!.viewModel.initialLoading
                 } onChange: { indicator, loading in
                     if loading {
                         indicator.startAnimating()
@@ -144,18 +173,19 @@ extension SearchGitHubListViewController: UICollectionViewDelegate {
 
 
 extension SearchGitHubListViewController: UISearchBarDelegate {
-    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+    func searchBar(_ searchBar: UISearchBar, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        viewModel.set(searchText: searchBar.text)
         return true
     }
-    
+
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        viewModel.cancelSearch()
+        viewModel.clearText()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         Task {
             do {
-                try await viewModel.search(text: searchBar.text)
+                try await viewModel.search()
             } catch {
                 self.alert(message: error.localizedDescription)
             }
@@ -163,7 +193,8 @@ extension SearchGitHubListViewController: UISearchBarDelegate {
     }
 }
 
+
 #Preview {
-    SearchGitHubListRouterImpl.makeModulesForUITest()
+    SearchGitHubListRouterImpl.makeModulesForUITest().withUINavigationController
 }
 

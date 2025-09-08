@@ -47,6 +47,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				ForUITest/ProcessInfoForUITest.swift,
+				ForUITest/SearchGitHubListAccessibilityIdentifier.swift,
 			);
 			target = BFD945FB244DC5EB0012785A /* iOSEngineerCodeCheckUITests */;
 		};

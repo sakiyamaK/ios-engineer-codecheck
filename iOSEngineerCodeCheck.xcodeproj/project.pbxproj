@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B69334ED2E6EC38000B54D20 /* DeclarativeUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = B69334EC2E6EC38000B54D20 /* DeclarativeUIKit */; };
 		B69334F02E6ECFCE00B54D20 /* ObservableUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = B69334EF2E6ECFCE00B54D20 /* ObservableUIKit */; };
+		B6E72C5F2E74429B00151B36 /* DeclarativeUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = B6E72C5E2E74429B00151B36 /* DeclarativeUIKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +81,7 @@
 			files = (
 				B69334F02E6ECFCE00B54D20 /* ObservableUIKit in Frameworks */,
 				B69334ED2E6EC38000B54D20 /* DeclarativeUIKit in Frameworks */,
+				B6E72C5F2E74429B00151B36 /* DeclarativeUIKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -213,8 +215,8 @@
 			);
 			mainGroup = BFD945D2244DC5E80012785A;
 			packageReferences = (
-				B69334EB2E6EC38000B54D20 /* XCLocalSwiftPackageReference "../../001_Library/DeclarativeUIKit" */,
 				B69334EE2E6ECFCE00B54D20 /* XCRemoteSwiftPackageReference "ObservableUIKit" */,
+				B6E72C5D2E74429B00151B36 /* XCRemoteSwiftPackageReference "DeclarativeUIKit" */,
 			);
 			productRefGroup = BFD945DC244DC5E80012785A /* Products */;
 			projectDirPath = "";
@@ -412,7 +414,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 4295L2DWK5;
 				INFOPLIST_FILE = iOSEngineerCodeCheck/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -430,7 +432,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = 4295L2DWK5;
 				INFOPLIST_FILE = iOSEngineerCodeCheck/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -562,20 +564,21 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		B69334EB2E6EC38000B54D20 /* XCLocalSwiftPackageReference "../../001_Library/DeclarativeUIKit" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../001_Library/DeclarativeUIKit;
-		};
-/* End XCLocalSwiftPackageReference section */
-
 /* Begin XCRemoteSwiftPackageReference section */
 		B69334EE2E6ECFCE00B54D20 /* XCRemoteSwiftPackageReference "ObservableUIKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/sakiyamaK/ObservableUIKit";
 			requirement = {
 				kind = upToNextMajorVersion;
-				minimumVersion = 5.0.0;
+				minimumVersion = 5.0.1;
+			};
+		};
+		B6E72C5D2E74429B00151B36 /* XCRemoteSwiftPackageReference "DeclarativeUIKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sakiyamaK/DeclarativeUIKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.1.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -589,6 +592,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B69334EE2E6ECFCE00B54D20 /* XCRemoteSwiftPackageReference "ObservableUIKit" */;
 			productName = ObservableUIKit;
+		};
+		B6E72C5E2E74429B00151B36 /* DeclarativeUIKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B6E72C5D2E74429B00151B36 /* XCRemoteSwiftPackageReference "DeclarativeUIKit" */;
+			productName = DeclarativeUIKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

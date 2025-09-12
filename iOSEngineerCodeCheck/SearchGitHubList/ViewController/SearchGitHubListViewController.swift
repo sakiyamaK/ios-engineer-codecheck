@@ -119,6 +119,7 @@ extension SearchGitHubListViewController: UISearchBarDelegate {
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
         Task {
             do {
                 try await viewModel.search(text: searchBar.text)
